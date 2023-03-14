@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var users = require('./../inc/users');
 
 router.get('/', function(req, res, nex){
     res.render('admin/index', {
@@ -9,9 +10,29 @@ router.get('/', function(req, res, nex){
 
 router.get('/login', function(req, res, nex){
 
-    if(!req.session.views) req.session.views = 0
-    console.log("SESSION: "+req.session.views++);
-    res.render('admin/login');
+    users.render(req, res, null)
+});
+
+router.post('/login', function(req, res, nex){
+
+    if(!req.body.email){
+        users.render(req, res, "Insira o email")
+    }
+    else if(!req.body.password){
+        users.render(req,res, "Insira a senha")
+    }
+    else{
+        users.login(req.body.email, req.body.password).then(user => {
+
+            req.session.user = user;
+
+            res.redirect("/admin")
+
+        }).catch(err=>{
+            users.render(req,res, err.message || err)
+        })
+    }
+
 });
 
 router.get('/contacts', function(req, res, nex){
