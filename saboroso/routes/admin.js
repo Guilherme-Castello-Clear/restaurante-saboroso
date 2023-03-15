@@ -1,7 +1,8 @@
 var express = require('express');
 const session = require('express-session');
 var router = express.Router();
-var admin = require('./../inc/admin')
+var admin = require('./../inc/admin');
+var menus = require('./../inc/menus')
 var users = require('./../inc/users');
 
 router.use(function(req, res, next){
@@ -31,9 +32,13 @@ router.get('/logout', function(req, res, next){
 });
 
 router.get('/', function(req, res, nex){
-    
-    res.render('admin/index', admin.getParams(req));
-
+    admin.dashboard().then(data=> {
+        res.render('admin/index', admin.getParams(req, {
+            data
+        }));
+    }).catch(err => {
+        console.error(err);
+    })
 });
 
 router.get('/login', function(req, res, nex){
@@ -77,8 +82,21 @@ router.get('/reservations', function(req, res, nex){
     }));
 });
 
+router.post('/menus', function(req, res, next){
+    menus.save(req.fields, req.files).then(results => {
+        res.send(results);
+        console.log("ADMIN ROUTES OK");
+    }).catch(err => {
+        res.send(err);
+    });
+})
+
 router.get('/menus', function(req, res, nex){
-    res.render('admin/menus', admin.getParams(req));
+    menus.getMenus().then(data => {   
+        res.render('admin/menus', admin.getParams(req, {
+            data
+        }));
+    })
 });
 
 router.get('/users', function(req, res, nex){
