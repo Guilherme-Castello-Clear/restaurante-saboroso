@@ -36,12 +36,12 @@
                 </tr>
               </thead>
               <tbody>
-                <% data.forEach(function(row){%>
+                <% data.forEach(function(row){ console.log(row)%>
                 <tr data-row="<%= JSON.stringify(row)%>">
                   <td><%= row.id%></td>
                   <td><img src="/<%=row.photo%>" alt="" style="height: 18px;"></td>
-                  <td><%row.title%></td>
                   <td><%= row.title%></td>
+                  <td><%= row.description%></td>
                   <td><%= row.price%></td>
                   <td><button type="button" class="btn btn-xs btn-info btn-update"><i
                         class="fa fa-pencil"></i> Editar</button>&nbsp;<button type="button" class="btn btn-xs btn-danger btn-delete"><i
@@ -102,7 +102,7 @@
     <div class="modal fade" id="modal-update">
       <div class="modal-dialog">
         <div class="modal-content" style="border-top: 3px solid #00c0ef;">
-          <form method="post">
+          <form method="post" action="/admin/menus">
             <input type="hidden" name="id">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -144,38 +144,36 @@
     <%- include('inc/footer') -%>
 
   <script src="/js/hcode-filereader.js"></script>
+  <script src="/js/hcode-formsave.js"></script>
+
   <script>
 
     new HcodeFileReader('#modal-create [type=file]', '#modal-create img');
     new HcodeFileReader('#modal-update [type=file]', '#modal-update img');
 
     let formCreate = document.querySelector("#modal-create form");
-    
-    formCreate.addEventListener('submit', e => {
-      
-      e.preventDefault();
 
-      let formCreateData = new FormData(formCreate);
-      
+    formCreate.save().then(json =>{
 
-      fetch('/admin/menus', {
-        method: 'POST',
-        body: formCreateData
-      })
-        .then(response => response.json()
-        .then(json => {
+      window.location.reload();
 
-          window.location.reload();
+    }).catch(err =>{
 
-        }).catch(err =>{
-        console.error(err);
-      })
-      ).catch(err =>{
-        console.error(err);
-      })
+      console.log(err);
+
     });
 
     let formUpdate = document.querySelector('#modal-update form');
+
+    formUpdate.save().then(json =>{
+
+      window.location.reload();
+
+    }).catch(err =>{
+
+      console.log(err);
+
+    });
 
     [...document.querySelectorAll('.btn-update')].forEach(btn => {
 
