@@ -18,30 +18,62 @@ module.exports = {
 
         return new Promise((resolve, reject) => {
 
-            let date = fields.date.split('/');
-            fields.date = `${date[2]}/${date[1]}/${date[0]}`
+            if(fields.date.indexOf('/') > -1){
+                let date = fields.date.split('-');
+                fields.date = `${date[2]}/${date[1]}/${date[0]}`
+            }
+            let query, params = [
+                fields.name,
+                fields.email,
+                fields.people,
+                fields.date,
+                fields.time,
+            ];
+            console.log('FIELDS.DATE: '+ fields.date)
+            if(parseInt(fields.id) > 0){
+                query = `
+                    UPDATE tb_reservations
+                    SET
+                        name = ?,
+                        email = ?
+                        people = ?
+                        date = ?,
+                        time = ?
+                    WHERE id = ?
+                `;
 
-            conn.query(`
-                INSERT INTO tb_reservations (name, email, people, date, time)
-                VALUES(?, ?, ?, ?, ?)
-
-                `, [
+                params = [
                     fields.name,
                     fields.email,
                     fields.people,
                     fields.date,
-                    fields.time
-                ], (err, results)=>{
+                    fields.time,
+                    fields.id
+                ]
+            }
+            else{
+                query =`
+                    INSERT INTO tb_reservations (name, email, people, date, time)
+                    VALUES(?, ?, ?, ?, ?)
+                `;
+
+            }
+
+            conn.query(query, params, (err, resulta)=>{
+                    console.log('QUERY: '+query)
+                    console.log('PARAMS: '+params)
+
                     if(err){
+                        console.log('On Error: '+err)
                         reject(err)
                     }
                     else{
-                        resolve(results);
+                        resolve(resulta);
                     }
                 });
             })
 
         
-    }
+        }
 
 }

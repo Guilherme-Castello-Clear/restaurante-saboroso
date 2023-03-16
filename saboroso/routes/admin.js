@@ -2,8 +2,9 @@ var express = require('express');
 const session = require('express-session');
 var router = express.Router();
 var admin = require('./../inc/admin');
-var menus = require('./../inc/menus')
+var menus = require('./../inc/menus');
 var users = require('./../inc/users');
+var reservation = require('./../inc/reservations');
 
 router.use(function(req, res, next){
 
@@ -81,6 +82,25 @@ router.get('/reservations', function(req, res, nex){
         date: {}
     }));
 });
+
+router.post('/reservation', function(req, res, next){
+    reservation.save(req.fields, req.files).then(results => {
+        res.send(results);
+        console.log("ADMIN ROUTES OK");
+    }).catch(err => {
+        res.send(err);
+    });
+})
+
+router.delete('/reservation/:id', function(req, res, next){
+    reservation.delete(req.params.id).then(result =>{
+        res.send(result)
+    }).catch(err => {
+        res.send(err)
+    });
+})
+
+
 
 router.post('/menus', function(req, res, next){
     menus.save(req.fields, req.files).then(results => {
