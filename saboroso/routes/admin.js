@@ -5,6 +5,9 @@ var admin = require('./../inc/admin');
 var menus = require('./../inc/menus');
 var users = require('./../inc/users');
 var reservation = require('./../inc/reservations');
+var moment = require('moment');
+
+moment.locale('pt-BR');
 
 router.use(function(req, res, next){
 
@@ -78,9 +81,19 @@ router.get('/emails', function(req, res, nex){
 });
 
 router.get('/reservations', function(req, res, nex){
-    res.render('admin/reservations', admin.getParams(req, {
-        date: {}
-    }));
+
+    reservation.getReservations().then(data => {
+    
+        res.render('admin/reservations', admin.getParams(req, {
+    
+            date: {},
+            data,
+            moment
+
+        }));
+    })
+
+    
 });
 
 router.post('/reservation', function(req, res, next){
