@@ -60,8 +60,8 @@ module.exports = {
                     UPDATE tb_reservations
                     SET
                         name = ?,
-                        email = ?
-                        people = ?
+                        email = ?,
+                        people = ?,
                         date = ?,
                         time = ?
                     WHERE id = ?
@@ -99,6 +99,25 @@ module.exports = {
             })
 
         
-        }
+        },
+
+        delete(id){
+            return new Promise((resolve, reject) =>{
+                conn.query(`
+                    DELETE FROM tb_reservations WHERE id = ?
+                `, [
+                    id
+                ], (err, result) =>{
+                    if(err){
+                        console.log(err);
+                        reject(err);
+                    }
+                    else{
+                        console.log(result);
+                        resolve(result)
+                    }
+                })
+            })
+        },
 
 }
