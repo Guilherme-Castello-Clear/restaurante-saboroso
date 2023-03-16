@@ -80,5 +80,22 @@ module.exports = {
                 }
             })
         })
-    }
+    },
+
+    delete(id){
+        return new Promise((resolve, reject) =>{
+            conn.query(`
+                DELETE FROM tb_menus WHERE id = ?
+            `, [
+                id
+            ], (err, result) =>{
+                if(err){
+                    reject(err);
+                }
+                else{
+                    resolve(result)
+                }
+            })
+        })
+    },
 }
