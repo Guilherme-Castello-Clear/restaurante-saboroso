@@ -163,6 +163,18 @@ router.post('/users', function(req, res, nex){
     
 });
 
+router.post('/users/password-change', function(req, res, nex){
+    
+    users.changePassword(req).then(results =>{
+        res.send(results);
+    }).catch(err => {
+        res.send({
+            error: err
+        });
+    });
+    
+});
+
 router.delete('/users/:id', function(req, res, nex){
     users.delete(req.params.id).then(results =>{
         res.send(results);
