@@ -6,6 +6,7 @@ var menus = require('./../inc/menus');
 var users = require('./../inc/users');
 var reservation = require('./../inc/reservations');
 var contacts = require('./../inc/contacts');
+var emails = require('./../inc/emails');
 
 var moment = require('moment');
 
@@ -93,9 +94,30 @@ router.delete('/contacts/:id', function(req, res, next){
     })
 })
 
-router.get('/emails', function(req, res, nex){
-    res.render('admin/emails', admin.getParams(req));
+
+
+router.get('/emails', function(req, res, next){
+
+    emails.getEmails().then(data => {
+
+        res.render('admin/emails', admin.getParams(req, {
+            data
+        }));
+    });
+
 });
+
+router.delete('/emails/:id', function(req, res, next){
+
+    emails.delete(req.params.id).then(results => {
+        res.send(results);
+    }).catch(err => {
+        res.send(err);
+    })
+
+});
+
+
 
 router.get('/reservations', function(req, res, nex){
 

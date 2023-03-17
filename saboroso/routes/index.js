@@ -4,6 +4,8 @@ var router = express.Router();
 var menus = require('./../inc/menus');
 var reservations = require('./../inc/reservations');
 var contacts = require('./../inc/contacts');
+var emails = require('./../inc/emails');
+
 
 
 
@@ -112,6 +114,22 @@ router.get('/services', function(req, res, next){
     background: 'images/img_bg_1.jpg',
     h1: 'É um prazer pode servir!'
   });
-})
+});
+
+router.post('/subscribe', function(req, res, next){
+
+  emails.save(req).then(results=>{
+    console.log('RESULTS: '+results);
+    res.send(results);
+  
+  }).catch(err => {
+  
+    res.send(err);
+  
+  })
+
+  return router;
+
+});
 
 module.exports = router;
