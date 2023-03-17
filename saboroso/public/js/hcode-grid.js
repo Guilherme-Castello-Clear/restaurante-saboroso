@@ -45,7 +45,6 @@ class HcodeGrid{
             btnDelete: '.btn-delete',
 
         }, configs);
-        console.log(this.options.formUpdate);
         this.initForms();
         this.initButtons();
 
@@ -115,19 +114,8 @@ class HcodeGrid{
 
             for(let name in data){
 
-            let input = this.formUpdate.querySelector(`[name=${name}]`);
-
-            switch(name){
-                case 'date':
-
-                if(input) input.value = moment(data[name]).format('YYYY-MM-DD');
-
-                break;
-                default:
-                if(input) input.value = data[name];
-
-                break;
-            }
+                this.options.onUpdateLoad(this.formUpdate, name, data);
+                     
 
             }
             this.fireEvent('afterUpdateClick', [e]);
@@ -158,6 +146,7 @@ class HcodeGrid{
                 this.fireEvent('afterDeleteClick');
 
             }).catch(err=>{
+                
                 console.error(err);
             })
             }).catch(err=>{

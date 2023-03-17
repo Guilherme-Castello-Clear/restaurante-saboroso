@@ -145,93 +145,36 @@
 
   <script src="/js/hcode-filereader.js"></script>
   <script src="/js/hcode-formsave.js"></script>
+  <script src="/js/hcode-grid.js"></script>
+
 
   <script>
 
     new HcodeFileReader('#modal-create [type=file]', '#modal-create img');
     new HcodeFileReader('#modal-update [type=file]', '#modal-update img');
 
-    let formCreate = document.querySelector("#modal-create form");
 
-    formCreate.save().then(json =>{
-
-      window.location.reload();
-
-    }).catch(err =>{
-
-      console.log(err);
-
-    });
-
-    let formUpdate = document.querySelector('#modal-update form');
-
-    formUpdate.save().then(json =>{
-
-      window.location.reload();
-
-    }).catch(err =>{
-
-      console.log(err);
-
-    });
-    [...document.querySelectorAll('.btn-delete')].forEach(btn=>{
-      btn.addEventListener('click', e =>{
-
-
-        let tr = e.composedPath().find(el => {
-
-        return (el.tagName.toUpperCase() === 'TR');
-
-        });
-        let data = JSON.parse(tr.dataset.row);
-
-        if(confirm(`Deseja exluir o prato ${data.title}?`)){
-
-          fetch(`/admin/menus/${data.id}`, {
-            method: 'DELETE'
-          })
-          .then(response => { response.json()
-          .then(json => {
-              window.location.reload();
-            })})
-        }
-
+    new HcodeGrid({
         
-      })
-    });
+        deleteUrl: './menus/${data.id}',
+        deleteMsg: 'Deseja exluir o prato ${data.title}?',
+        onUpdateLoad: (formUpdate, name, data) => {
+          console.log('DATA!!!!: '+data);
+          let input = formUpdate.querySelector(`[name=${name}]`);
 
+            switch(name){
 
-    [...document.querySelectorAll('.btn-update')].forEach(btn => {
+              case 'photo':
+                  formUpdate.querySelector('img').src = '/'+data[name];
+              break;
 
-      btn.addEventListener('click', e =>{
+              default:
+                  if(input) input.value = data[name];
 
-        let tr = e.composedPath().find(el => {
-
-          return (el.tagName.toUpperCase() === 'TR');
-
-        });
-
-        let data = JSON.parse(tr.dataset.row);
-
-        for(let name in data){
-
-          switch(name){
-            case 'photo':
-              formUpdate.querySelector('img').src = '/'+data[name];
-            break;
-            default:
-              let input = formUpdate.querySelector(`[name=${name}]`);
-
-              if(input) input.value = data[name];
-            break;
-          }
-
+              break;
+            }
         }
-        $('#modal-update').modal('show');
 
-      })
-
-    });
-
+      });
 
   </script>
