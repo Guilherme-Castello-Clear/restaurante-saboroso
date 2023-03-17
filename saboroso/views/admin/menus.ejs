@@ -159,7 +159,6 @@
         deleteUrl: './menus/${data.id}',
         deleteMsg: 'Deseja exluir o prato ${data.title}?',
         onUpdateLoad: (formUpdate, name, data) => {
-          console.log('DATA!!!!: '+data);
           let input = formUpdate.querySelector(`[name=${name}]`);
 
             switch(name){

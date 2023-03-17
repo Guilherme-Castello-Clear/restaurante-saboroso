@@ -32,14 +32,15 @@ module.exports = {
         return new Promise((resolve, reject)=> {
 
             fields.photo = 'images/'+path.parse(files.photo.path).base;
-
             let query, queryPhoto = '', params = [
                 fields.title,
                 fields.description,
                 fields.price,
             ];
 
-            if(fields.photo){
+            if(fields.photo && fields.photo.includes('.')){
+                console.log('INSIDE IF: '+fields.photo);
+
                 queryPhoto = ', photo = ?'
                 params.push(fields.photo)
             }

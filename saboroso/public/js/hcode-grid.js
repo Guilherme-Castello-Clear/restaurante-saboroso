@@ -16,6 +16,8 @@ class HcodeGrid{
             },
 
             afterFormCreate: (e) =>{
+
+
                 window.location.reload();
 
             },
@@ -26,13 +28,11 @@ class HcodeGrid{
             },
 
             afterFormCreateError: (e) =>{
-                console.log('erro')
-                window.location.reload();
+                console.alert('erro')
             },
 
             afterFormUpdateError: (e) =>{
-                console.log('erro')
-                window.location.reload();
+                console.alert('erro')
             }
 
 
@@ -62,14 +62,18 @@ class HcodeGrid{
         this.formCreate = document.querySelector(this.options.formCreate);
 
         if(this.formCreate){
+
             this.formCreate.save({
-                succes:() => {
+                success:() => {
+
                     this.fireEvent('afterFormCreate')
                 },
-                faile:() => {
+                failure:() => {
+
                     this.fireEvent('afterFormCreateError')
                 }
             });
+
         }
 
         this.formUpdate = document.querySelector(this.options.formUpdate);
@@ -77,10 +81,10 @@ class HcodeGrid{
         if(this.formUpdate){
 
             this.formUpdate.save({
-                succes:() => {
+                success:() => {
                     this.fireEvent('afterFormUpdate')
                 },
-                faile:() => {
+                failure:() => {
                     this.fireEvent('afterFormUpdateError')
                 }
             });
