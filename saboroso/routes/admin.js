@@ -145,6 +145,17 @@ router.get('/reservations', function(req, res, nex){
     
 });
 
+router.get('/reservations/chart', function(req, res, next){
+
+    req.query.start = (req.query.start) ? req.query.start : moment().subtract(1, 'year').format('YYYY-MM-DD');
+    req.query.end = (req.query.end) ? req.query.end : moment().subtract(1, 'year').format('YYYY-MM-DD');
+
+
+    reservation.chart(req).then(chartData=>{
+        res.send(chartData)
+    })
+})
+
 router.post('/reservation', function(req, res, next){
     reservation.save(req.fields, req.files).then(results => {
         res.send(results);
