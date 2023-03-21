@@ -58,8 +58,8 @@ module.exports = {
         return new Promise((resolve, reject) => {
 
             if(fields.date.indexOf('/') > -1){
-                let date = fields.date.split('-');
-                fields.date = `${date[2]}/${date[1]}/${date[0]}`
+                let date = fields.date.split('/');
+                fields.date = `${date[2]}-${date[1]}-${date[0]}`
             }
             let query, params = [
                 fields.name,
@@ -172,6 +172,26 @@ module.exports = {
                 });
             })
 
+        },
+
+        dashboard(){
+            return new Promise((resolve, reject) => {
+            conn.query(`
+                SELECT
+                    (SELECT COUNT(*) FROM tb_contacts) AS nrcontacts,
+                    (SELECT COUNT(*) FROM tb_menus) AS nrmenus,
+                    (SELECT COUNT(*) FROM tb_reservations) AS nrreservations,
+                    (SELECT COUNT(*) FROM tb_users) AS nrusers;
+                `, (err, results) => {
+                    
+                        if(err){
+                            reject(err);
+                        }
+                        else{
+                            resolve(results[0]);
+                        }
+                    })
+            })
         }
 
 }
