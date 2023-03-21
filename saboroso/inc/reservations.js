@@ -5,7 +5,7 @@ var moment = require('moment');
 
 module.exports = {
 
-    render(req, res, error, sucess){
+    render(req, res, error, success){
 
         res.render('reservations', {
             title: 'Reservas - Restaurante Saboroso!',
@@ -13,7 +13,7 @@ module.exports = {
             h1: 'Reserve uma mesa!',
             body: req.body,
             error,
-            sucess
+            success
           });
     },
 
